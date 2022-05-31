@@ -5,19 +5,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 /** 2022.05.09 jongdroid
  *  [핵심 기능]
- *  qr을 스캔하여 data로 메뉴를 추출하며, 고정된 메뉴를 피하고자 list 데이터를 담았습니다.
+ *  qr을 스캔하여 data로 메뉴를 추출하며, 고정된 메뉴를 피하고자 list로 데이터를 담았습니다.
  */
 
-//큐알 스캔을 통해 랜덤으로 메뉴를 받을 수 있는 변수
-var createRanNum = Random().nextInt(MenuList.length);
-
-//QR 스캔 후 얻을 수 있는 메뉴 리스트
-var MenuList = [
-  '짜장면','짬뽕', '볶음밥', '탕수육', '김치찌개', '삼겹살', '된장찌개', '찜닭', '순대국', '갈비탕', '부대찌개', '콩나물국밥'
-];
-
-// 랜덤으로 생성한 값을 통해 리스트 인덱스를 받아와 해당 변수에 저장하여 출력하는 변수
-var QRPrintMenu = '${MenuList[createRanNum]}';
+/* [**내 실수**]
+ *  setState 안에 절대로 함수가 들어가면 안돼 훈종아!! --> 변수만 들어갈 것
+ */
 
 void main() {
   runApp(MyApp());
@@ -39,6 +32,28 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+//큐알 스캔을 통해 랜덤으로 메뉴를 받을 수 있는 변수
+var createRanNum = Random().nextInt(MenuList.length);
+
+//QR 스캔 후 얻을 수 있는 메뉴 리스트
+var MenuList = [
+  '짜장면',
+  '짬뽕',
+  '볶음밥',
+  '탕수육',
+  '김치찌개',
+  '삼겹살',
+  '된장찌개',
+  '찜닭',
+  '순대국',
+  '갈비탕',
+  '부대찌개',
+  '콩나물국밥'
+];
+
+// 랜덤으로 생성한 값을 통해 리스트 인덱스를 받아와 해당 변수에 저장하여 출력하는 변수
+var QRPrintMenu = '${MenuList[createRanNum]}';
 
 class CreateQR extends StatefulWidget {
   const CreateQR({Key? key}) : super(key: key);
@@ -68,11 +83,10 @@ class _CreateQRState extends State<CreateQR> {
                     child: ElevatedButton(
                       child: Icon(Icons.refresh),
                       onPressed: () {
-                        //setState 안에 절대로 함수가 들어가면 안돼!!
-                        // 무조건 변수만 들어가는거야 << 커밋하기전에 빼기
+                        ShowToast();
+                        createRanNum = Random().nextInt(MenuList.length);
                         setState(() {
-                          ShowToast();
-                          refreshNum();
+                          QRPrintMenu = '${MenuList[createRanNum]}';
                         });
                       },
                     ),
@@ -85,12 +99,6 @@ class _CreateQRState extends State<CreateQR> {
       ),
     );
   }
-}
-
-// 랜덤 값 갱신
-void refreshNum() {
-  createRanNum = Random().nextInt(MenuList.length);
-  QRPrintMenu = '${MenuList[createRanNum]}';
 }
 
 // 버튼 클릭 Toast
